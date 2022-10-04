@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+<context:component-scan base-package="com.jang.biz"/>
+
+<!-- 다국어 처리 -->
+   <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="basenames">
+         <list>
+            <value>message.messageSource</value>
+         </list>
+      </property>
+   </bean>
+   
+   <!-- Locale 정보를 판단해줄 Resolver -->
+   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+   
+   <!-- Locale 정보를 변경해서 사용하고 싶을 lang으로 변경가능 -->
+     <mvc:interceptors>
+      <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+         <property name="paramName" value="lang" />
+      </bean>
+   </mvc:interceptors>
+
+<!-- 예외처리를 @으로 설정 -->
+<!-- <mvc:annotation-driven/> -->
+
+<!-- 예외처리 등록 -->
+<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<property name="exceptionMappings">
+		<props>
+           <prop key="java.lan.NullPointerException">error/error.jsp</prop>
+           <prop key="java.lang.ArithmeticException">error/error.jsp</prop>
+           <prop key="java.lang.Exception">error/error.jsp</prop>
+        </props>
+    </property>
+</bean>
+
+
+<!-- 파일 업로드 관련 설정 -->
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="maxUploadSize" value="-1"/><!-- -1로 하면 무제한크기 -->
+</bean>
+
+<!--   
+    HandlerMapping 객체 생성
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/login.do">login</prop>
+				<prop key="/main.do">main</prop>
+				<prop key="/board.do">board</prop>
+				<prop key="/logout.do">logout</prop>
+				<prop key="/signUp.do">signUp</prop>
+				<prop key="/updateM.do">updateM</prop>
+				<prop key="/delete.do">delete</prop>
+			</props>
+		</property>
+	</bean>
+   
+   Controller객체 등록
+   <bean id="login" class="com.jang.biz.controller.LoginController"/>
+   <bean id="main" class="com.jang.biz.controller.MainController"/>
+   <bean id="board" class="com.jang.biz.controller.BoardController"/>
+   <bean id="logout" class="com.jang.biz.controller.LogoutController"/>
+   <bean id="signUp" class="com.jang.biz.controller.SignUpController"/>
+   <bean id="updateM" class="com.jang.biz.controller.UpdateMemberController"/>
+   <bean id="delete" class="com.jang.biz.controller.DeleteController"/>
+   
+   ViewResolver 등록
+   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="/WEB-INF/view/" />
+      <property name="suffix" value=".jsp" />
+   </bean> 
+   -->
+   
+   
+   
+</beans>

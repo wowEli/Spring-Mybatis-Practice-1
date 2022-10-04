@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardDAO"> <!-- sql문을 한 가득 담을건데 뭐라고 부를래? DAO랑 같은 이름으로 하는게 국룰 -->
+
+	<resultMap type="board" id="boardResult"><!-- join같이 아웃풋을 내가 정할 때 수정 -->
+		<id property="bid" column="BID"/>
+		<result property="title" column="TITLE"/>
+		<result property="writer" column="WRITER"/>
+		<result property="content" column="CONTENT"/>
+	</resultMap>
+
+	<insert id="insertBoard"><!-- 동일한 xml에서는 id가 겹치면 안됨 --> 
+		INSERT INTO BOARD(TITLE,WRITER,CONTENT) VALUES(#{title},#{writer},#{content})
+	</insert>
+	
+	<update id="updateBoard">
+		UPDATE BOARD SET TITLE=#{title},WRITER=#{writer} WHERE BID=#{bid}
+	</update>
+	
+	<delete id="deleteBoard">
+		DELETE BOARD WHERE BID=#{bid}
+	</delete>
+
+	<select id="selectOneBoard" resultType="board"><!-- select 문은 아웃 풋이 있기때문에 결과를 어떤타입에 매핑시킬건지 명시 -->
+		SELECT * FROM BOARD WHERE BID = #{bid}
+	</select> 
+	
+	<select id="selectAllBoard" resultMap="boardResult">
+		SELECT * FROM BOARD 
+		WHERE TITLE LIKE CONCAT('%',#{content},'%') 
+		ORDER BY BID DESC
+	</select>
+</mapper>
